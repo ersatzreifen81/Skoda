@@ -3,12 +3,13 @@
   "name": "Bluschkodas Wettkampf",
   "icons": [
     {
-      "src": "skoda.png",
+      "src": "/Skoda/skoda.png",
       "sizes": "192x192",
       "type": "image/png"
     }
   ],
-  "start_url": "/Skoda/Skoda.html",
+  "start_url": "/Skoda/",
+  "scope": "/Skoda/",
   "background_color": "#f4f4f9",
   "theme_color": "#4169E1",
   "display": "standalone",
