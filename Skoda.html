@@ -20,6 +20,7 @@
             justify-content: center;
             gap: 50px;
             margin-top: 30px;
+            align-items: flex-start; /* Verhindert, dass die Boxen unterschiedliche Höhen haben */
         }
         .teilnehmer {
             background: white;
@@ -62,15 +63,24 @@
             color: #666;
             text-align: left;
             line-height: 1.4;
+            border-bottom: 1px solid #eee; /* Neue Trennlinie */
+            padding-bottom: 15px; /* Abstand zur Trennlinie */
         }
         .statistik strong {
             color: #333;
+        }
+        .skoda-bild {
+            margin-top: 15px;
+            max-width: 100%; /* Passt sich der Breite der Box an */
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
 
-    <h1>Bluschkodas</h1>
+    <h1>Blaue Skodas</h1>
 
     <div class="wettkampf-container">
         <div class="teilnehmer">
@@ -79,9 +89,10 @@
             <button class="btn btn-minus" id="btn-benjamin-minus">-1</button>
             <div class="ergebnis" id="scoreBenjamin">Lade...</div>
             <div class="statistik">
-                <div>echter blauer Skoda: <strong id="stat-benjamin-plus">0</strong></div>
-                <div>metallic oder komplett verballert: <strong id="stat-benjamin-minus">0</strong></div>
+                <div>Plus geklickt: <strong id="stat-benjamin-plus">0</strong></div>
+                <div>Minus geklickt: <strong id="stat-benjamin-minus">0</strong></div>
             </div>
+            <img src="skoda.png" alt="Blauer Skoda" class="skoda-bild">
         </div>
 
         <div class="teilnehmer">
@@ -90,9 +101,10 @@
             <button class="btn btn-minus" id="btn-christina-minus">-1</button>
             <div class="ergebnis" id="scoreChristina">Lade...</div>
             <div class="statistik">
-                <div>echter blauer Skoda: <strong id="stat-christina-plus">0</strong></div>
-                <div>metallic oder komplett verballert: <strong id="stat-christina-minus">0</strong></div>
+                <div>Plus geklickt: <strong id="stat-christina-plus">0</strong></div>
+                <div>Minus geklickt: <strong id="stat-christina-minus">0</strong></div>
             </div>
+            <img src="skoda.png" alt="Blauer Skoda" class="skoda-bild">
         </div>
     </div>
 
