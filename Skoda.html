@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bluschkodas</title>
     <style>
@@ -158,6 +159,13 @@
         document.getElementById('btn-benjamin-minus').addEventListener('click', () => registerClick(benjaminRef, benjaminMinusRef, -1));
         document.getElementById('btn-christina-plus').addEventListener('click', () => registerClick(christinaRef, christinaPlusRef, 1));
         document.getElementById('btn-christina-minus').addEventListener('click', () => registerClick(christinaRef, christinaMinusRef, -1));
+        if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+            .then(reg => console.log('Service Worker registriert', reg))
+            .catch(err => console.error('Service Worker Fehler', err));
+    });
+}
     </script>
 
 </body>
