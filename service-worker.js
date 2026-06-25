@@ -1,10 +1,10 @@
-const CACHE_NAME = 'bluschkodas-v1';
+const CACHE_NAME = 'bluschkodas-v2'; // Version erhöht, um alten Cache zu leeren
 const ASSETS = [
-  './',
-  './index.html',
-  './skoda.png',
-  './skoda rot.png',
-  './manifest.json'
+  '/Skoda/',
+  '/Skoda/index.html',
+  '/Skoda/skoda.png',
+  '/Skoda/skoda rot.png',
+  '/Skoda/manifest.json'
 ];
 
 self.addEventListener('install', (e) => {
