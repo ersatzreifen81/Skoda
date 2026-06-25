@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bluschkoda</title>
+    <title>Blaue Skodas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,7 +26,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 150px;
+            width: 170px;
         }
         .teilnehmer h2 {
             margin-top: 0;
@@ -53,12 +53,24 @@
             font-size: 24px;
             font-weight: bold;
             margin-top: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .statistik {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+            text-align: left;
+            line-height: 1.4;
+        }
+        .statistik strong {
+            color: #333;
         }
     </style>
 </head>
 <body>
 
-    <h1>Bluschkodas</h1>
+    <h1>Blaue Skodas</h1>
 
     <div class="wettkampf-container">
         <div class="teilnehmer">
@@ -66,6 +78,10 @@
             <button class="btn btn-plus" id="btn-benjamin-plus">+1</button>
             <button class="btn btn-minus" id="btn-benjamin-minus">-1</button>
             <div class="ergebnis" id="scoreBenjamin">Lade...</div>
+            <div class="statistik">
+                <div>Plus geklickt: <strong id="stat-benjamin-plus">0</strong></div>
+                <div>Minus geklickt: <strong id="stat-benjamin-minus">0</strong></div>
+            </div>
         </div>
 
         <div class="teilnehmer">
@@ -73,6 +89,10 @@
             <button class="btn btn-plus" id="btn-christina-plus">+1</button>
             <button class="btn btn-minus" id="btn-christina-minus">-1</button>
             <div class="ergebnis" id="scoreChristina">Lade...</div>
+            <div class="statistik">
+                <div>Plus geklickt: <strong id="stat-christina-plus">0</strong></div>
+                <div>Minus geklickt: <strong id="stat-christina-minus">0</strong></div>
+            </div>
         </div>
     </div>
 
@@ -80,7 +100,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Korrigierte Firebase Konfiguration mit Ihren Projektdaten
+        // Firebase Konfiguration
         const firebaseConfig = {
             apiKey: "AIzaSyDZrG-57VuffJmp-i9PiA6OJdV7HeMg54o",
             authDomain: "skoda-678b1.firebaseapp.com",
@@ -95,11 +115,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Referenzen auf die Scores in der DB
+        // Referenzen auf die Scores und Statistiken in der DB
         const benjaminRef = ref(db, 'scores/benjamin');
         const christinaRef = ref(db, 'scores/christina');
+        
+        const benjaminPlusRef = ref(db, 'stats/benjamin_plus');
+        const benjaminMinusRef = ref(db, 'stats/benjamin_minus');
+        const christinaPlusRef = ref(db, 'stats/christina_plus');
+        const christinaMinusRef = ref(db, 'stats/christina_minus');
 
-        // Echtzeit-Synchronisation: Werte aus DB lesen und anzeigen
+        // Echtzeit-Synchronisation für die aktuellen Spielstände
         onValue(benjaminRef, (snapshot) => {
             const data = snapshot.val();
             document.getElementById('scoreBenjamin').innerText = data !== null ? data : 0;
@@ -110,18 +135,29 @@
             document.getElementById('scoreChristina').innerText = data !== null ? data : 0;
         });
 
-        // Transaktions-Funktion zur sicheren Erhöhung/Verringerung
-        function changeScore(scoreRef, value) {
+        // Echtzeit-Synchronisation für die Klick-Statistiken
+        onValue(benjaminPlusRef, (snapshot) => { document.getElementById('stat-benjamin-plus').innerText = snapshot.val() || 0; });
+        onValue(benjaminMinusRef, (snapshot) => { document.getElementById('stat-benjamin-minus').innerText = snapshot.val() || 0; });
+        onValue(christinaPlusRef, (snapshot) => { document.getElementById('stat-christina-plus').innerText = snapshot.val() || 0; });
+        onValue(christinaMinusRef, (snapshot) => { document.getElementById('stat-christina-minus').innerText = snapshot.val() || 0; });
+
+        // Funktion zur gleichzeitigen Aktualisierung von Score und Statistik-Zähler
+        function registerClick(scoreRef, statRef, value) {
+            // Spielstand anpassen (+1 oder -1)
             runTransaction(scoreRef, (currentValue) => {
                 return (currentValue || 0) + value;
+            });
+            // Statistik-Zähler für diesen Button immer um 1 erhöhen
+            runTransaction(statRef, (currentValue) => {
+                return (currentValue || 0) + 1;
             });
         }
 
         // Event Listener für die Buttons
-        document.getElementById('btn-benjamin-plus').addEventListener('click', () => changeScore(benjaminRef, 1));
-        document.getElementById('btn-benjamin-minus').addEventListener('click', () => changeScore(benjaminRef, -1));
-        document.getElementById('btn-christina-plus').addEventListener('click', () => changeScore(christinaRef, 1));
-        document.getElementById('btn-christina-minus').addEventListener('click', () => changeScore(christinaRef, -1));
+        document.getElementById('btn-benjamin-plus').addEventListener('click', () => registerClick(benjaminRef, benjaminPlusRef, 1));
+        document.getElementById('btn-benjamin-minus').addEventListener('click', () => registerClick(benjaminRef, benjaminMinusRef, -1));
+        document.getElementById('btn-christina-plus').addEventListener('click', () => registerClick(christinaRef, christinaPlusRef, 1));
+        document.getElementById('btn-christina-minus').addEventListener('click', () => registerClick(christinaRef, christinaMinusRef, -1));
     </script>
 
 </body>
