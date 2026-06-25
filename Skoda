@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaue Skodas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .wettkampf-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+        .teilnehmer {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 150px;
+        }
+        .teilnehmer h2 {
+            margin-top: 0;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-plus {
+            background-color: #4169E1; /* Royalblau */
+        }
+        .btn-minus {
+            background-color: #DC3545; /* Rot */
+        }
+        .ergebnis {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
 
+    <h1>Blaue Skodas</h1>
+
+    <div class="wettkampf-container">
+        <div class="teilnehmer">
+            <h2>Benjamin</h2>
+            <button class="btn btn-plus" id="btn-benjamin-plus">+1</button>
+            <button class="btn btn-minus" id="btn-benjamin-minus">-1</button>
+            <div class="ergebnis" id="scoreBenjamin">Lade...</div>
+        </div>
+
+        <div class="teilnehmer">
+            <h2>Christina</h2>
+            <button class="btn btn-plus" id="btn-christina-plus">+1</button>
+            <button class="btn btn-minus" id="btn-christina-minus">-1</button>
+            <div class="ergebnis" id="scoreChristina">Lade...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Firebase Konfiguration (Hier die eigenen Daten einfügen)
+        const firebaseConfig = {
+            // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDZrG-57VuffJmp-i9PiA6OJdV7HeMg54o",
+  authDomain: "skoda-678b1.firebaseapp.com",
+  projectId: "skoda-678b1",
+  storageBucket: "skoda-678b1.firebasestorage.app",
+  messagingSenderId: "932453592140",
+  appId: "1:932453592140:web:95cad55a451fac941b18e9",
+  measurementId: "G-DLHH0SLF1Z"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+        };
+
+        // Firebase initialisieren
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Referenzen auf die Scores in der DB
+        const benjaminRef = ref(db, 'scores/benjamin');
+        const christinaRef = ref(db, 'scores/christina');
+
+        // Echtzeit-Synchronisation: Werte aus DB lesen und anzeigen
+        onValue(benjaminRef, (snapshot) => {
+            const data = snapshot.val();
+            document.getElementById('scoreBenjamin').innerText = data !== null ? data : 0;
+        });
+
+        onValue(christinaRef, (snapshot) => {
+            const data = snapshot.val();
+            document.getElementById('scoreChristina').innerText = data !== null ? data : 0;
+        });
+
+        // Transaktions-Funktion zur sicheren Erhöhung/Verringerung (verhindert Konflikte bei zeitgleichen Klicks)
+        function changeScore(scoreRef, value) {
+            runTransaction(scoreRef, (currentValue) => {
+                return (currentValue || 0) + value;
+            });
+        }
+
+        // Event Listener für die Buttons
+        document.getElementById('btn-benjamin-plus').addEventListener('click', () => changeScore(benjaminRef, 1));
+        document.getElementById('btn-benjamin-minus').addEventListener('click', () => changeScore(benjaminRef, -1));
+        document.getElementById('btn-christina-plus').addEventListener('click', () => changeScore(christinaRef, 1));
+        document.getElementById('btn-christina-minus').addEventListener('click', () => changeScore(christinaRef, -1));
+    </script>
+
+</body>
+</html>
