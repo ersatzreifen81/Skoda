@@ -1,7 +1,7 @@
 const CACHE_NAME = 'bluschkodas-v2'; // Version erhöht, um alten Cache zu leeren
 const ASSETS = [
   '/Skoda/',
-  '/Skoda/index.html',
+  '/Skoda/Skoda.html',
   '/Skoda/skoda.png',
   '/Skoda/skoda rot.png',
   '/Skoda/manifest.json'
