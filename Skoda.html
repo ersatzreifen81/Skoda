@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blaue Skodas</title>
+    <title>Bluschkodas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,61 +20,51 @@
             justify-content: center;
             gap: 50px;
             margin-top: 30px;
-            align-items: flex-start; /* Verhindert, dass die Boxen unterschiedliche Höhen haben */
+            align-items: flex-start;
         }
         .teilnehmer {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 170px;
+            width: 180px;
         }
         .teilnehmer h2 {
             margin-top: 0;
+            margin-bottom: 15px;
         }
-        .btn {
+        /* Bild-Buttons Styling */
+        .img-btn {
             display: block;
             width: 100%;
-            padding: 10px;
+            height: auto;
             margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
             cursor: pointer;
+            border-radius: 6px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
-        .btn-plus {
-            background-color: #4169E1; /* Royalblau */
-        }
-        .btn-minus {
-            background-color: #DC3545; /* Rot */
+        /* Visuelles Feedback beim Antippen/Klicken */
+        .img-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         .ergebnis {
             font-size: 24px;
             font-weight: bold;
             margin-top: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
         .statistik {
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 13px;
             color: #666;
             text-align: left;
             line-height: 1.4;
-            border-bottom: 1px solid #eee; /* Neue Trennlinie */
-            padding-bottom: 15px; /* Abstand zur Trennlinie */
         }
         .statistik strong {
             color: #333;
-        }
-        .skoda-bild {
-            margin-top: 15px;
-            max-width: 100%; /* Passt sich der Breite der Box an */
-            height: auto;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -85,26 +75,26 @@
     <div class="wettkampf-container">
         <div class="teilnehmer">
             <h2>Benjamin</h2>
-            <button class="btn btn-plus" id="btn-benjamin-plus">+1</button>
-            <button class="btn btn-minus" id="btn-benjamin-minus">-1</button>
+            <img src="skoda.png" alt="+1" class="img-btn" id="btn-benjamin-plus">
+            <img src="skoda rot.png" alt="-1" class="img-btn" id="btn-benjamin-minus">
+            
             <div class="ergebnis" id="scoreBenjamin">Lade...</div>
             <div class="statistik">
-                <div>Plus geklickt: <strong id="stat-benjamin-plus">0</strong></div>
-                <div>Minus geklickt: <strong id="stat-benjamin-minus">0</strong></div>
+                <div>echter blauer Skoda: <strong id="stat-benjamin-plus">0</strong></div>
+                <div>metallic oder komplett verballert: <strong id="stat-benjamin-minus">0</strong></div>
             </div>
-            <img src="skoda.png" alt="Blauer Skoda" class="skoda-bild">
         </div>
 
         <div class="teilnehmer">
             <h2>Christina</h2>
-            <button class="btn btn-plus" id="btn-christina-plus">+1</button>
-            <button class="btn btn-minus" id="btn-christina-minus">-1</button>
+            <img src="skoda.png" alt="+1" class="img-btn" id="btn-christina-plus">
+            <img src="skoda rot.png" alt="-1" class="img-btn" id="btn-christina-minus">
+            
             <div class="ergebnis" id="scoreChristina">Lade...</div>
             <div class="statistik">
-                <div>Plus geklickt: <strong id="stat-christina-plus">0</strong></div>
-                <div>Minus geklickt: <strong id="stat-christina-minus">0</strong></div>
+                <div>echter blauer Skoda: <strong id="stat-christina-plus">0</strong></div>
+                <div>metallic oder komplett verballert: <strong id="stat-christina-minus">0</strong></div>
             </div>
-            <img src="skoda.png" alt="Blauer Skoda" class="skoda-bild">
         </div>
     </div>
 
@@ -155,17 +145,15 @@
 
         // Funktion zur gleichzeitigen Aktualisierung von Score und Statistik-Zähler
         function registerClick(scoreRef, statRef, value) {
-            // Spielstand anpassen (+1 oder -1)
             runTransaction(scoreRef, (currentValue) => {
                 return (currentValue || 0) + value;
             });
-            // Statistik-Zähler für diesen Button immer um 1 erhöhen
             runTransaction(statRef, (currentValue) => {
                 return (currentValue || 0) + 1;
             });
         }
 
-        // Event Listener für die Buttons
+        // Event Listener für die Bild-Buttons
         document.getElementById('btn-benjamin-plus').addEventListener('click', () => registerClick(benjaminRef, benjaminPlusRef, 1));
         document.getElementById('btn-benjamin-minus').addEventListener('click', () => registerClick(benjaminRef, benjaminMinusRef, -1));
         document.getElementById('btn-christina-plus').addEventListener('click', () => registerClick(christinaRef, christinaPlusRef, 1));
