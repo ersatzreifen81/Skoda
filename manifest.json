@@ -1,1 +1,16 @@
-"start_url": "/Skoda/Skoda.html",
+{
+  "short_name": "Bluschkodas",
+  "name": "Bluschkodas Wettkampf",
+  "icons": [
+    {
+      "src": "skoda.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/Skoda/Skoda.html",
+  "background_color": "#f4f4f9",
+  "theme_color": "#4169E1",
+  "display": "standalone",
+  "orientation": "portrait"
+}
